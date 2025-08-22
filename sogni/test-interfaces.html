@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTU PosterLab - 界面测试页面</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 测试页面专用样式 */
+        .test-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .test-controls h3 {
+            margin: 0 0 15px 0;
+            color: #4CAF50;
+        }
+        
+        .test-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .test-btn:hover {
+            background: #45a049;
+        }
+        
+        .test-btn.secondary {
+            background: #2196F3;
+        }
+        
+        .test-btn.secondary:hover {
+            background: #1976D2;
+        }
+        
+        .test-btn.danger {
+            background: #f44336;
+        }
+        
+        .test-btn.danger:hover {
+            background: #d32f2f;
+        }
+        
+        .mock-data {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .mock-data h4 {
+            margin: 0 0 10px 0;
+            color: #e0e7ff;
+        }
+        
+        .mock-data pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 测试控制面板 -->
+    <div class="test-controls">
+        <h3>🧪 界面测试控制</h3>
+        
+        <button class="test-btn" onclick="showGenerationPage()">
+            🎨 显示生成界面
+        </button>
+        
+        <button class="test-btn secondary" onclick="showResultsPage()">
+            🎉 显示结果界面
+        </button>
+        
+        <button class="test-btn secondary" onclick="showMockData()">
+            📊 显示模拟数据
+        </button>
+        
+        <button class="test-btn danger" onclick="hideAllPages()">
+            🚫 隐藏所有界面
+        </button>
+        
+        <div class="mock-data" id="mockDataDisplay" style="display: none;">
+            <h4>模拟数据预览</h4>
+            <pre id="mockDataContent"></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 生成界面 -->
+        <div class="page-section poster-generation-page" style="display: none;">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>🎨 Generating Your Poster</h2>
+                    <p>AI is creating your beautiful poster, please wait...</p>
+                </div>
+                <div class="generation-status">
+                    <div class="loading-spinner"></div>
+                    <div class="status-text">Processing your request...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果界面 -->
+        <div class="page-section results-page" style="display: none;">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>🎉 Your Poster is Ready!</h2>
+                    <p>Here are your generated posters with AI-optimized prompts</p>
+                </div>
+                
+                <div class="results-container">
+                    <!-- 海报展示区域 -->
+                    <div class="poster-showcase-section">
+                        <div class="section-header">
+                            <h3>🖼️ Generated Posters</h3>
+                            <p>AI-generated posters based on your requirements</p>
+                        </div>
+                        <div class="poster-results" id="posterResults">
+                            <!-- 模拟海报数据 -->
+                            <div class="poster-item">
+                                <div class="poster-header">
+                                    <h3>🎨 Poster 1</h3>
+                                    <span class="poster-status stored">Stored</span>
+                                </div>
+                                <div class="poster-image">
+                                    <img src="https://via.placeholder.com/300x400/4CAF50/FFFFFF?text=Mock+Poster+1" 
+                                         alt="Mock Poster 1" 
+                                         style="max-width: 100%; height: auto; border-radius: 12px;">
+                                </div>
+                                <div class="poster-info">
+                                    <div class="info-row">
+                                        <span class="info-label">📁 Filename</span>
+                                        <span class="info-value">mock_poster_1.png</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">🏢 Activity</span>
+                                        <span class="info-value">NTU AI Workshop</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">💾 Size</span>
+                                        <span class="info-value">2.5 MB</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">📅 Created</span>
+                                        <span class="info-value">2025-01-20 15:30</span>
+                                    </div>
+                                </div>
+                                <div class="poster-actions">
+                                    <button class="download-single-btn">
+                                        <span class="btn-icon">💾</span>
+                                        <span class="btn-text">Download</span>
+                                    </button>
+                                    <a href="#" class="view-original-btn">
+                                        <span class="btn-icon">👁️</span>
+                                        <span class="btn-text">View</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="poster-item">
+                                <div class="poster-header">
+                                    <h3>🎨 Poster 2</h3>
+                                    <span class="poster-status remote">Remote</span>
+                                </div>
+                                <div class="poster-image">
+                                    <img src="https://via.placeholder.com/300x400/2196F3/FFFFFF?text=Mock+Poster+2" 
+                                         alt="Mock Poster 2" 
+                                         style="max-width: 100%; height: auto; border-radius: 12px;">
+                                </div>
+                                <div class="poster-info">
+                                    <div class="info-row">
+                                        <span class="info-label">📁 Filename</span>
+                                        <span class="info-value">mock_poster_2.png</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">🏢 Activity</span>
+                                        <span class="info-value">Blockchain Conference</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">💾 Size</span>
+                                        <span class="info-value">3.1 MB</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">📅 Created</span>
+                                        <span class="info-value">2025-01-20 15:35</span>
+                                    </div>
+                                </div>
+                                <div class="poster-actions">
+                                    <button class="download-single-btn">
+                                        <span class="btn-icon">💾</span>
+                                        <span class="btn-text">Download</span>
+                                    </button>
+                                    <a href="#" class="view-original-btn">
+                                        <span class="btn-icon">👁️</span>
+                                        <span class="btn-text">View</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 质量评估区域 -->
+                    <div class="quality-assessment-section">
+                        <div class="section-header">
+                            <h3>🎯 Quality Assessment</h3>
+                            <p>AI prompt optimization and quality scoring</p>
+                        </div>
+                        <div class="quality-info">
+                            <div class="quality-header">
+                                <h3>Prompt Quality Score</h3>
+                            </div>
+                            <div class="quality-score">
+                                <div class="score-number">9</div>
+                                <div class="score-grade a">A</div>
+                                <div class="score-percentage">75%</div>
+                            </div>
+                            <div class="quality-breakdown">
+                                <div class="quality-item">
+                                    <div class="quality-label">Clarity</div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="quality-value">3/3</div>
+                                </div>
+                                <div class="quality-item">
+                                    <div class="quality-label">Specificity</div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="quality-value">3/3</div>
+                                </div>
+                                <div class="quality-item">
+                                    <div class="quality-label">Balance</div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="quality-value">2/2</div>
+                                </div>
+                                <div class="quality-item">
+                                    <div class="quality-label">Creativity</div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill" style="width: 50%;"></div>
+                                    </div>
+                                    <div class="quality-value">1/2</div>
+                                </div>
+                                <div class="quality-item">
+                                    <div class="quality-label">Technical</div>
+                                    <div class="quality-bar">
+                                        <div class="quality-fill" style="width: 0%;"></div>
+                                    </div>
+                                    <div class="quality-value">0/2</div>
+                                </div>
+                            </div>
+                            <div class="optimization-details">
+                                <p><strong>Style:</strong> Modern Minimalist</p>
+                                <p><strong>Activity Type:</strong> Educational Event</p>
+                                <p><strong>Prompt Length:</strong> 456 characters</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮区域 -->
+                    <div class="action-section">
+                        <div class="section-header">
+                            <h3>🚀 Actions</h3>
+                            <p>What would you like to do next?</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="download-btn primary-btn">
+                                <span class="btn-icon">💾</span>
+                                <span class="btn-text">Download All</span>
+                            </button>
+                            <button type="button" class="generate-more-btn secondary-btn">
+                                <span class="btn-icon">🔄</span>
+                                <span class="btn-text">Generate More</span>
+                            </button>
+                            <button type="button" class="back-btn tertiary-btn">
+                                <span class="btn-icon">←</span>
+                                <span class="btn-text">Back to Form</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 测试控制函数
+        function showGenerationPage() {
+            hideAllPages();
+            document.querySelector('.poster-generation-page').style.display = 'block';
+            console.log('✅ 显示生成界面');
+        }
+        
+        function showResultsPage() {
+            hideAllPages();
+            document.querySelector('.results-page').style.display = 'block';
+            console.log('✅ 显示结果界面');
+        }
+        
+        function hideAllPages() {
+            document.querySelector('.poster-generation-page').style.display = 'none';
+            document.querySelector('.results-page').style.display = 'none';
+            console.log('🚫 隐藏所有界面');
+        }
+        
+        function showMockData() {
+            const mockData = {
+                clubName: "NTU AI Club",
+                activityContent: "Intro to Stable Diffusion and prompt engineering workshop",
+                posterStyle: "modern minimalist",
+                activityTime: "2025-09-20 19:00",
+                activityLocation: "Student Activity Centre Room 204",
+                themeColor: "#0055FF",
+                generatedImages: [
+                    {
+                        filename: "mock_poster_1.png",
+                        activityName: "NTU AI Workshop",
+                        size: "2.5 MB",
+                        created: "2025-01-20 15:30",
+                        localPath: true
+                    },
+                    {
+                        filename: "mock_poster_2.png",
+                        activityName: "Blockchain Conference",
+                        size: "3.1 MB",
+                        created: "2025-01-20 15:35",
+                        localPath: false
+                    }
+                ],
+                qualityScore: {
+                    score: 9,
+                    maxScore: 12,
+                    percentage: 75,
+                    grade: "A",
+                    breakdown: {
+                        clarity: 3,
+                        specificity: 3,
+                        balance: 2,
+                        creativity: 1,
+                        technical: 0
+                    }
+                }
+            };
+            
+            document.getElementById('mockDataContent').textContent = JSON.stringify(mockData, null, 2);
+            document.getElementById('mockDataDisplay').style.display = 'block';
+            console.log('📊 显示模拟数据');
+        }
+        
+        // 页面加载完成后显示说明
+        window.addEventListener('load', function() {
+            console.log('🎯 界面测试页面已加载');
+            console.log('💡 使用右上角的测试控制面板来切换不同界面');
+            console.log('🔧 可以直接修改HTML和CSS来调整界面');
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTU PosterLab - Club Activity Information Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Page -->
+        <div class="page-section welcome-section">
+            <h1>Welcome To NTU PosterLab</h1>
+            <div class="subtitle">Nanyang Technological University Poster Laboratory</div>
+            <div class="description">
+                Create your club activity posters and make every event spectacular
+            </div>
+            <div class="scroll-hint">
+                ↓ Scroll to start creating your poster ↓
+            </div>
+        </div>
+        
+        <!-- Club Name Page -->
+        <div class="page-section form-page" data-step="1">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 1: Club Name</h2>
+                    <p>Please enter your club name</p>
+                </div>
+                <div class="form-group">
+                    <label for="clubName">Club Name *</label>
+                    <div class="search-container">
+                        <input type="text" id="clubName" name="clubName" required placeholder="Please enter club name or search...">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
+                    </div>
+                </div>
+                <div class="page-hint">
+                    ↓ Continue scrolling to next step ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Content Page -->
+        <div class="page-section form-page" data-step="2">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 2: Activity Content</h2>
+                    <p>Please describe your activity in detail</p>
+                </div>
+                <div class="form-group">
+                    <label for="activityContent">Activity Content *</label>
+                    <textarea id="activityContent" name="activityContent" required placeholder="Please describe the activity content in detail..."></textarea>
+                </div>
+                <div class="page-hint">
+                    ↓ Continue scrolling to next step ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Poster Style Page -->
+        <div class="page-section form-page" data-step="3">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 3: Poster Style</h2>
+                    <p>Choose your preferred poster design style</p>
+                </div>
+                <div class="form-group">
+                    <label for="posterStyle">Poster Style *</label>
+                    <select id="posterStyle" name="posterStyle" required>
+                        <option value="">Please select poster style</option>
+                        <option value="Modern Minimalist">Modern Minimalist</option>
+                        <option value="Vintage Artistic">Vintage Artistic</option>
+                        <option value="Dynamic Energetic">Dynamic Energetic</option>
+                        <option value="Elegant Formal">Elegant Formal</option>
+                        <option value="Creative Artistic">Creative Artistic</option>
+                        <option value="Tech Futuristic">Tech Futuristic</option>
+                    </select>
+                </div>
+                <div class="page-hint">
+                    ↓ Continue scrolling to next step ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Time Page -->
+        <div class="page-section form-page" data-step="4">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 4: Activity Time</h2>
+                    <p>Set your activity time</p>
+                </div>
+                <div class="form-group">
+                    <label for="activityTime">Activity Time *</label>
+                    <input type="datetime-local" id="activityTime" name="activityTime" required>
+                </div>
+                <div class="page-hint">
+                    ↓ Continue scrolling to next step ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Location Page -->
+        <div class="page-section form-page" data-step="5">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 5: Activity Location</h2>
+                    <p>Enter the activity venue</p>
+                </div>
+                <div class="form-group">
+                    <label for="activityLocation">Activity Location *</label>
+                    <div class="search-container">
+                        <input type="text" id="activityLocation" name="activityLocation" required placeholder="Please enter activity location or search...">
+                        <div class="search-suggestions" id="locationSearchSuggestions"></div>
+                    </div>
+                </div>
+                <div class="page-hint">
+                    ↓ Continue scrolling to next step ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Theme Color Page -->
+        <div class="page-section form-page" data-step="6">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Step 6: Theme Color</h2>
+                    <p>Choose the activity theme color</p>
+                </div>
+                <div class="form-group">
+                    <label for="themeColor">Theme Color *</label>
+                    <input type="color" id="themeColor" name="themeColor" required value="#4CAF50">
+                    <span class="color-preview" id="colorPreview">#4CAF50</span>
+                </div>
+                <div class="page-hint">
+                    ↓ Scroll down to view results and submit ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Page -->
+        <div class="page-section submit-page">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>Congratulations! One More Step</h2>
+                    <p>Please click submit to complete information collection</p>
+                </div>
+                <div class="submit-actions">
+                    <button type="button" class="submit-btn" onclick="submitForm()">Submit Information</button>
+                    <button type="button" class="reset-btn" onclick="resetForm()">Fill Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Poster Generation Page -->
+        <div class="page-section poster-generation-page" style="display: none;">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>🎨 Generating Your Poster</h2>
+                    <p>AI is creating your beautiful poster, please wait...</p>
+                </div>
+                <div class="generation-status">
+                    <div class="loading-spinner"></div>
+                    <div class="status-text">Processing your request...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div class="page-section results-page" style="display: none;">
+            <div class="page-content">
+                <div class="page-header">
+                    <h2>🎉 Your Poster is Ready!</h2>
+                    <p>Here are your generated posters with AI-optimized prompts</p>
+                </div>
+                
+                <div class="results-container">
+                    <!-- 海报展示区域 -->
+                    <div class="poster-showcase-section">
+                        <div class="section-header">
+                            <h3>🖼️ Generated Posters</h3>
+                            <p>AI-generated posters based on your requirements</p>
+                        </div>
+                        <div class="poster-results" id="posterResults"></div>
+                    </div>
+                    
+                    <!-- 质量评估区域 -->
+                    <div class="quality-assessment-section">
+                        <div class="section-header">
+                            <h3>🎯 Quality Assessment</h3>
+                            <p>AI prompt optimization and quality scoring</p>
+                        </div>
+                        <div class="quality-info" id="qualityInfo"></div>
+                    </div>
+                    
+                    <!-- 操作按钮区域 -->
+                    <div class="action-section">
+                        <div class="section-header">
+                            <h3>🚀 Actions</h3>
+                            <p>What would you like to do next?</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="download-btn primary-btn" onclick="downloadAllPosters()">
+                                <span class="btn-icon">💾</span>
+                                <span class="btn-text">Download All</span>
+                            </button>
+                            <button type="button" class="generate-more-btn secondary-btn" onclick="generateMorePosters()">
+                                <span class="btn-icon">🔄</span>
+                                <span class="btn-text">Generate More</span>
+                            </button>
+                            <button type="button" class="back-btn tertiary-btn" onclick="backToForm()">
+                                <span class="btn-icon">←</span>
+                                <span class="btn-text">Back to Form</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

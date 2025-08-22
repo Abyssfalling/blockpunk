@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTU 社团海报生成器 - 图片库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0055FF 0%, #0044CC 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #0055FF;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .activity-section {
+            margin-bottom: 40px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .activity-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .activity-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .activity-count {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .image-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .image-card:hover .image-container img {
+            transform: scale(1.05);
+        }
+        
+        .image-info {
+            padding: 15px;
+        }
+        
+        .image-filename {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        
+        .image-meta {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #dc3545;
+        }
+        
+        .refresh-btn {
+            background: #0055FF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            background: #0044CC;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 NTU 社团海报生成器</h1>
+            <p>图片库 - 查看所有已生成的海报</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalActivities">-</div>
+                <div class="stat-label">活动数量</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalImages">-</div>
+                <div class="stat-label">图片总数</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="controls">
+                <button class="refresh-btn" onclick="loadImages()">🔄 刷新图片库</button>
+            </div>
+            
+            <div id="imagesContainer">
+                <div class="loading">正在加载图片...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadImages() {
+            const container = document.getElementById('imagesContainer');
+            const statsContainer = document.getElementById('stats');
+            
+            try {
+                container.innerHTML = '<div class="loading">正在加载图片...</div>';
+                
+                const response = await fetch('/api/images');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // 更新统计信息
+                    document.getElementById('totalActivities').textContent = data.totalActivities;
+                    document.getElementById('totalImages').textContent = data.totalImages;
+                    
+                    if (data.activities.length === 0) {
+                        container.innerHTML = '<div class="loading">暂无图片，请先生成一些海报！</div>';
+                        return;
+                    }
+                    
+                    // 渲染图片
+                    let html = '';
+                    for (const activity of data.activities) {
+                        html += `
+                            <div class="activity-section">
+                                <div class="activity-header">
+                                    <div class="activity-title">${activity.activityName}</div>
+                                    <div class="activity-count">${activity.count} 张图片</div>
+                                </div>
+                                <div class="images-grid">
+                        `;
+                        
+                        for (const image of activity.images) {
+                            const createdDate = new Date(image.created).toLocaleString('zh-CN');
+                            const fileSize = (image.size / 1024 / 1024).toFixed(2);
+                            
+                            html += `
+                                <div class="image-card">
+                                    <div class="image-container">
+                                        <img src="${image.publicPath}" alt="${image.filename}" 
+                                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2FhYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4='">
+                                    </div>
+                                    <div class="image-info">
+                                        <div class="image-filename">${image.filename}</div>
+                                        <div class="image-meta">
+                                            创建时间: ${createdDate}<br>
+                                            文件大小: ${fileSize} MB
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
+                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    container.innerHTML = html;
+                } else {
+                    throw new Error(data.message || '加载失败');
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+                container.innerHTML = `
+                    <div class="error">
+                        <h3>加载失败</h3>
+                        <p>${error.message}</p>
+                        <button class="refresh-btn" onclick="loadImages()">重试</button>
+                    </div>
+                `;
+            }
+        }
+        
+        // 页面加载时自动加载图片
+        document.addEventListener('DOMContentLoaded', loadImages);
+    </script>
+</body>
+</html>
+
